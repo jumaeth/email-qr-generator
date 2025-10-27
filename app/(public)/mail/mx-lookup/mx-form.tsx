@@ -4,19 +4,19 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {useState} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {qrFormData, qrFormSchema} from "@/lib/validations/qr";
 import {toast} from "sonner";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Icons} from "@/components/icons";
 import {Card} from "@/components/ui/card";
+import {emailFormData, emailFormSchema} from "@/lib/validations/email";
 
 export default function MxForm() {
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [imap, setImap] = useState("");
   const [smtp, setSmtp] = useState("");
 
-  async function onSubmit(data: qrFormData) {
+  async function onSubmit(data: emailFormData) {
     setIsSaving(true);
     const res = await fetch(`/api/detect-mail?email=${encodeURIComponent(data.email)}`);
     const result = await res.json();
@@ -31,8 +31,8 @@ export default function MxForm() {
     setIsSaving(false);
   }
 
-  const form = useForm<qrFormData>({
-    resolver: zodResolver(qrFormSchema),
+  const form = useForm<emailFormData>({
+    resolver: zodResolver(emailFormSchema),
     defaultValues: {
       email: "",
     },
