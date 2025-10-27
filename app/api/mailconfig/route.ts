@@ -5,12 +5,12 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   // Read all supported parameters (with defaults)
-  const email = searchParams.get("email") ?? "user@example.com";
-  const name = searchParams.get("name") ?? "User";
-  const imapHost = searchParams.get("imap") ?? "mail.yourdomain.com";
-  const smtpHost = searchParams.get("smtp") ?? "smtp.yourdomain.com";
-  const organization = searchParams.get("org") ?? "Your Company";
-  const description = searchParams.get("desc") ?? "Mail Account";
+  const email = searchParams.get("email");
+  const name = searchParams.get("name");
+  const imapHost = searchParams.get("imap");
+  const smtpHost = searchParams.get("smtp");
+  const organization = searchParams.get("organization");
+  const description = searchParams.get("description");
 
   // Optional UUIDs (for uniqueness)
   const uuidMain = uuidv4();
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
       <key>PayloadDisplayName</key>
       <string>${description}</string>
       <key>PayloadIdentifier</key>
-      <string>com.${organization.toLowerCase().replace(/\s+/g, '')}.mail.${email}</string>
+      <string>com.${organization?.toLowerCase().replace(/\s+/g, '')}.mail.${email}</string>
       <key>PayloadOrganization</key>
       <string>${organization}</string>
       <key>PayloadType</key>
@@ -63,7 +63,7 @@ export async function GET(request: Request) {
   <key>PayloadDisplayName</key>
   <string>${description}</string>
   <key>PayloadIdentifier</key>
-  <string>com.${organization.toLowerCase().replace(/\s+/g, '')}.profile.${email}</string>
+  <string>com.${organization?.toLowerCase().replace(/\s+/g, '')}.profile.${email}</string>
   <key>PayloadType</key>
   <string>Configuration</string>
   <key>PayloadUUID</key>

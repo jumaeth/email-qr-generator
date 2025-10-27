@@ -4,7 +4,7 @@ import QRCode from "qrcode";
 import QrForm from "@/app/(public)/mail/qr-generator/qr-form";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import CustomInputForm from "@/app/(public)/mail/qr-generator/custom-input-form";
+import ManualSettingsForm from "@/app/(public)/mail/qr-generator/manual-settings-form";
 
 export default function MailConfigPage() {
   const [qr, setQr] = useState("");
@@ -50,7 +50,7 @@ export default function MailConfigPage() {
             <CardDescription>Scan the generated QR code with your iPhone or Mac to import your mail settings.</CardDescription>
           </CardHeader>
           <CardContent>
-            <CustomInputForm/>
+            <ManualSettingsForm/>
           </CardContent>
         </Card>
       </TabsContent>

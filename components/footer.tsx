@@ -9,7 +9,7 @@ export const Footer = () => {
   return (
     <footer className="bottom-0 left-0 w-full bg-white">
       <Separator/>
-      <div className="lg:w-1/2 md:w-2/3 p-4 mx-auto">
+      <div className="lg:w-1/2 md:w-2/3 p-4 mx-auto mb-6">
         <div className="h-16 flex items-center">
           <Logo/>
         </div>

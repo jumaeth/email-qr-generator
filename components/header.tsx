@@ -50,7 +50,7 @@ export const Header = () => {
                     <NavigationMenuItem key={index}>
                       <NavigationMenuTrigger>{item.name}</NavigationMenuTrigger>
                       <NavigationMenuContent>
-                        <ul className="grid grid-cols-1 gap-2 w-[200px]">
+                        <ul className="grid grid-cols-1 gap-1 w-[200px]">
                           {item.subNav.map((subItem, subIndex) => (
                             <ListItem key={subIndex} href={item.href + "/" +subItem.href} title={subItem.name}/>
                           ))}
@@ -135,9 +135,6 @@ function ListItem({
       <NavigationMenuLink asChild>
         <Link href={href}>
           <div className="text-sm leading-none font-medium">{title}</div>
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-            {children}
-          </p>
         </Link>
       </NavigationMenuLink>
     </li>

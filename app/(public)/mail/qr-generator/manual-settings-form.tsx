@@ -7,27 +7,43 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Icons} from "@/components/icons";
-import QrForm from "@/app/(public)/mail/qr-generator/qr-form";
-import {customInputFormData, customInputFormSchema} from "@/lib/validations/custom-input";
+import {EmailGeneratorFields} from "@/app/(public)/mail/qr-generator/email-generator-fields";
+import {manualSettingsFormData, manualSettingsFormSchema} from "@/lib/validations/manual-settings";
+import {generateMailQr} from "@/actions/public/qr/generateMailQr";
+import {toast} from "sonner";
 
-export default function CustomInputForm() {
+export default function ManualSettingsForm() {
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [qr, setQr] = useState("");
 
-  async function onSubmit(data: customInputFormData) {
-    setIsSaving(true);
-
-    reset();
-    setIsSaving(false);
+  async function onSubmit(data: manualSettingsFormData) {
+    setIsSaving(true)
+    try {
+      const qrData = await generateMailQr({
+        ...data.qr,
+        imap: data.imap,
+        smtp: data.smtp,
+        autoDetect: false,
+      })
+      setQr(qrData)
+    } catch (err: any) {
+      toast.error(err.message)
+    }
+    reset()
+    setIsSaving(false)
   }
 
-  const form = useForm<customInputFormData>({
-    resolver: zodResolver(customInputFormSchema),
+  const form = useForm<manualSettingsFormData>({
+    resolver: zodResolver(manualSettingsFormSchema),
     defaultValues: {
+      qr: {
+        email: "",
+        name: "",
+        description: "",
+        organization: "",
+      },
       imap: "",
-      imap_port: "",
       smtp: "",
-      smtp_port: "",
     },
   })
   const {reset} = form;
@@ -37,8 +53,8 @@ export default function CustomInputForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="space-y-4">
-            <QrForm/>
-            <div className="grid grid-cols-[2fr_1fr] gap-4">
+            <EmailGeneratorFields prefix="qr"/>
+            <div className="grid grid-cols-1 gap-4">
               <FormField
                 control={form.control}
                 name="imap"
@@ -59,24 +75,6 @@ export default function CustomInputForm() {
               />
               <FormField
                 control={form.control}
-                name="imap_port"
-                render={({field}) => (
-                  <FormItem>
-                    <FormLabel>PORT</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="imap_port"
-                        placeholder="993"
-                        className="col-span-3"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage/>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="smtp"
                 render={({field}) => (
                   <FormItem>
@@ -85,24 +83,6 @@ export default function CustomInputForm() {
                       <Input
                         id="smtp"
                         placeholder="example.com"
-                        className="col-span-3"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage/>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="smtp_port"
-                render={({field}) => (
-                  <FormItem>
-                    <FormLabel>PORT</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="smtp_port"
-                        placeholder="465"
                         className="col-span-3"
                         {...field}
                       />
@@ -133,7 +113,6 @@ export default function CustomInputForm() {
           </div>
         )}
       </div>
-
     </>
   )
 }
