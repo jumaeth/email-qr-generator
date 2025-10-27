@@ -38,12 +38,16 @@ export async function GET(request: Request) {
       <true/>
       <key>IncomingMailServerUsername</key>
       <string>${email}</string>
+      <key>IncomingMailServerAuthentication</key>
+      <string>EmailAuthPassword</string>
       <key>OutgoingMailServerHostName</key>
       <string>${smtpHost}</string>
       <key>OutgoingMailServerUseSSL</key>
       <true/>
       <key>OutgoingMailServerUsername</key>
       <string>${email}</string>
+      <key>OutgoingMailServerAuthentication</key>
+      <string>EmailAuthPassword</string>
       <key>PayloadDescription</key>
       <string>Adds an email account</string>
       <key>PayloadDisplayName</key>
