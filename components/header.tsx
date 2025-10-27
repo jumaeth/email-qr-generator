@@ -33,7 +33,11 @@ const navItems = [
 
 export const Header = () => {
   const [open, setOpen] = useState(false)
-  const [priceOpen, setPricesOpen] = useState(false)
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggleDropdown = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
   return (
     <header>
@@ -52,7 +56,7 @@ export const Header = () => {
                       <NavigationMenuContent>
                         <ul className="grid grid-cols-1 gap-1 w-[200px]">
                           {item.subNav.map((subItem, subIndex) => (
-                            <ListItem key={subIndex} href={item.href + "/" +subItem.href} title={subItem.name}/>
+                            <ListItem key={subIndex} href={item.href + "/" + subItem.href} title={subItem.name}/>
                           ))}
                         </ul>
                       </NavigationMenuContent>
@@ -92,30 +96,56 @@ export const Header = () => {
               <SheetTitle>Menu</SheetTitle>
             </SheetHeader>
             <nav className="m-4 flex flex-col space-y-4">
-              <button
-                onClick={() => {
-                  setPricesOpen(!priceOpen)
-                  console.log("pressed", priceOpen)
-                }}
-                className="flex items-center text-base font-medium text-muted-foreground hover:text-foreground"
-              >
-                Preise
-                {priceOpen ? (
-                  <Icons.up className="ml-1 h-4 w-4"/>
-                ) : (
-                  <Icons.down className="ml-1 h-4 w-4"/>
-                )}
-              </button>
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="text-base font-medium text-muted-foreground hover:text-foreground"
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {navItems.map((item, index) => {
+                if (item.subNav) {
+                  const isOpen = openIndex === index;
+
+                  return (
+                    <div key={index}>
+                      <button
+                        onClick={() => {
+                          toggleDropdown(index)
+                        }}
+                        className="flex items-center text-base font-medium text-muted-foreground hover:text-foreground"
+                      >
+                        Mail
+                        {isOpen ? (
+                          <Icons.up className="ml-1 h-4 w-4"/>
+                        ) : (
+                          <Icons.down className="ml-1 h-4 w-4"/>
+                        )}
+                      </button>
+                      {isOpen && (
+                        <div className="ml-4 mt-1 flex flex-col gap-1">
+                          {item.subNav.map((subItem, subIndex) => (
+                            <Link
+                              key={subIndex}
+                              href={item.href + "/" + subItem.href}
+                              onClick={() => {
+                                setOpenIndex(null)
+                                setOpen(false)
+                              }}
+                              className="text-base font-medium text-muted-foreground hover:text-foreground"
+                            >
+                              {subItem.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
+
+                return (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    className="text-base font-medium text-muted-foreground hover:text-foreground"
+                  >
+                    {item.name}
+                  </Link>
+                )
+              })}
             </nav>
           </SheetContent>
         </Sheet>

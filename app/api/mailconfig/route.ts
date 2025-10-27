@@ -9,8 +9,8 @@ export async function GET(request: Request) {
   const name = searchParams.get("name");
   const imapHost = searchParams.get("imap");
   const smtpHost = searchParams.get("smtp");
-  const organization = searchParams.get("organization");
-  const description = searchParams.get("description");
+  const organization = searchParams.get("organization") || "YUW";
+  const description = searchParams.get("description") || "YUW Mail";
 
   // Optional UUIDs (for uniqueness)
   const uuidMain = uuidv4();
@@ -53,7 +53,7 @@ export async function GET(request: Request) {
       <key>PayloadDisplayName</key>
       <string>${description}</string>
       <key>PayloadIdentifier</key>
-      <string>com.${organization?.toLowerCase().replace(/\s+/g, '')}.mail.${email}</string>
+      <string>com.${organization.toLowerCase().replace(/\s+/g, '')}.mail.${email}</string>
       <key>PayloadOrganization</key>
       <string>${organization}</string>
       <key>PayloadType</key>
@@ -67,7 +67,7 @@ export async function GET(request: Request) {
   <key>PayloadDisplayName</key>
   <string>${description}</string>
   <key>PayloadIdentifier</key>
-  <string>com.${organization?.toLowerCase().replace(/\s+/g, '')}.profile.${email}</string>
+  <string>com.${organization.toLowerCase().replace(/\s+/g, '')}.profile.${email}</string>
   <key>PayloadType</key>
   <string>Configuration</string>
   <key>PayloadUUID</key>
